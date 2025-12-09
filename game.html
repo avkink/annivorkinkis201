@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soulja Boy Riddle Challenge</title>
+   
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial Black', sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 25px;
+            padding: 40px;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #f5576c;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .subtitle {
+            color: #f093fb;
+            font-size: 1.1em;
+            font-weight: normal;
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 15px;
+            color: white;
+        }
+
+        .score-item {
+            text-align: center;
+        }
+
+        .score-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .score-value {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        .riddle-container {
+            background: linear-gradient(135deg, #fff5f7 0%, #ffeef5 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px 0;
+            min-height: 200px;
+            border: 3px solid #f093fb;
+            position: relative;
+        }
+
+        .riddle-text {
+            font-size: 1.3em;
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            border: 3px solid #f093fb;
+            border-radius: 15px;
+            text-align: center;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: #f5576c;
+            box-shadow: 0 0 20px rgba(245, 87, 108, 0.3);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        button:active {
+            transform: translateY(-1px);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .hint-btn {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .skip-btn {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .feedback {
+            text-align: center;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .feedback.show {
+            opacity: 1;
+        }
+
+        .feedback.correct {
+            background: #43e97b;
+            color: white;
+        }
+
+        .feedback.incorrect {
+            background: #f5576c;
+            color: white;
+        }
+
+        .hint-box {
+            background: #fff9e6;
+            border: 2px dashed #fee140;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #333;
+            display: none;
+        }
+
+        .hint-box.show {
+            display: block;
+            animation: slideDown 0.3s;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .soulja-emoji {
+            font-size: 3em;
+            text-align: center;
+            margin: 20px 0;
+            animation: rotate 3s infinite;
+        }
+
+        @keyframes rotate {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        .game-over {
+            text-align: center;
+            display: none;
+        }
+
+        .game-over.show {
+            display: block;
+        }
+
+        .final-score {
+            font-size: 2.5em;
+            color: #f5576c;
+            margin: 20px 0;
+        }
+
+        .celebration {
+            font-size: 4em;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎤 SOULJA BOY RIDDLE CHALLENGE 🎤</h1>
+            <div class="subtitle">Think you know Big Soulja? Prove it!</div>
+            <nav class="nav-links">
+        <a href="index.html">Resume</a>
+        <a href="scratchpage.html">Crank That</a>
+    </nav>
+        </div>
+
+        <div class="score-board">
+            <div class="score-item">
+                <div class="score-label">Score</div>
+                <div class="score-value" id="score">0</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Riddle</div>
+                <div class="score-value"><span id="current">1</span>/<span id="total">10</span></div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Streak</div>
+                <div class="score-value" id="streak">0</div>
+            </div>
+        </div>
+
+        <div id="gameArea">
+            <div class="soulja-emoji">🕶️</div>
+            
+            <div class="riddle-container">
+                <div class="riddle-text" id="riddleText">Click "Start Game" to begin!</div>
+                <div class="hint-box" id="hintBox"></div>
+            </div>
+
+            <input type="text" class="answer-input" id="answerInput" placeholder="Type your answer here..." disabled>
+
+            <div class="feedback" id="feedback"></div>
+
+            <div class="button-group">
+                <button id="startBtn" onclick="startGame()">START GAME</button>
+                <button id="submitBtn" onclick="checkAnswer()" disabled>SUBMIT</button>
+                <button id="hintBtn" class="hint-btn" onclick="showHint()" disabled>HINT (-10 pts)</button>
+                <button id="skipBtn" class="skip-btn" onclick="skipRiddle()" disabled>SKIP</button>
+            </div>
+        </div>
+
+        <div class="game-over" id="gameOver">
+            <div class="celebration">🎉🎊🎉</div>
+            <h2>Game Complete!</h2>
+            <div class="final-score">Final Score: <span id="finalScore">0</span></div>
+            <div style="margin: 20px 0; font-size: 1.2em; color: #666;">
+                <span id="performance"></span>
+            </div>
+            <button onclick="restartGame()">PLAY AGAIN</button>
+        </div>
+    </div>
+
+    <script>
+        const riddles = [
+            {
+                question: "I'm a dance move that went viral in 2007, Superman did it, and you crank it. What am I?",
+                answer: "soulja boy",
+                hint: "It's literally the name of the artist!",
+                alternatives: ["crank that", "crank", "soulja"]
+            },
+            {
+                question: "I'm the year a young rapper from Chicago told everyone to watch him. What year am I?",
+                answer: "2007",
+                hint: "The year 'Crank That' topped the charts.",
+                alternatives: ["07", "two thousand seven"]
+            },
+            {
+                question: "I'm a superhero who got name-dropped in one of the most iconic rap lyrics ever. Who am I?",
+                answer: "superman",
+                hint: "He flies and wears a cape!",
+                alternatives: ["super man"]
+            },
+            {
+                question: "I'm the action you do before you 'soulja boy.' You turn and do me. What am I?",
+                answer: "crank",
+                hint: "It's the first word in the song title!",
+                alternatives: ["crank that", "crank it"]
+            },
+            {
+                question: "I'm the website where Soulja Boy first uploaded his music and became famous. What am I?",
+                answer: "youtube",
+                hint: "It's the world's biggest video platform.",
+                alternatives: ["you tube"]
+            },
+            {
+                question: "I'm the city where DeAndre Cortez Way was born. Known for deep dish pizza. What city am I?",
+                answer: "chicago",
+                hint: "The Windy City!",
+                alternatives: []
+            },
+            {
+                question: "I'm the state Soulja Boy moved to as a kid, known for peaches. What state am I?",
+                answer: "mississippi",
+                hint: "It's between Alabama and Louisiana.",
+                alternatives: ["ms"]
+            },
+            {
+                question: "I'm the album that featured 'Crank That' and made history. What am I called?",
+                answer: "souljaboytellem.com",
+                hint: "It's literally a website address!",
+                alternatives: ["souljaboytellem", "soulja boy tell em"]
+            },
+            {
+                question: "I'm what you do to 'that' before you soulja boy. It's also what you do to a car engine. What am I?",
+                answer: "crank",
+                hint: "It rhymes with 'tank'!",
+                alternatives: ["crank it"]
+            },
+            {
+                question: "I'm the real first name of the artist known as Soulja Boy. What name am I?",
+                answer: "deandre",
+                hint: "It starts with 'De' and ends with 'Andre'.",
+                alternatives: ["de andre"]
+            }
+        ];
+
+        let currentRiddle = 0;
+        let score = 0;
+        let streak = 0;
+        let hintsUsed = 0;
+        let gameActive = false;
+        let hintShown = false;
+
+        function startGame() {
+            gameActive = true;
+            currentRiddle = 0;
+            score = 0;
+            streak = 0;
+            hintsUsed = 0;
+
+            document.getElementById('startBtn').style.display = 'none';
+            document.getElementById('submitBtn').disabled = false;
+            document.getElementById('hintBtn').disabled = false;
+            document.getElementById('skipBtn').disabled = false;
+            document.getElementById('answerInput').disabled = false;
+            document.getElementById('gameArea').style.display = 'block';
+            document.getElementById('gameOver').classList.remove('show');
+
+            shuffleRiddles();
+            loadRiddle();
+            updateScore();
+        }
+
+        function shuffleRiddles() {
+            for (let i = riddles.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [riddles[i], riddles[j]] = [riddles[j], riddles[i]];
+            }
+        }
+
+        function loadRiddle() {
+            if (currentRiddle >= riddles.length) {
+                endGame();
+                return;
+            }
+
+            const riddle = riddles[currentRiddle];
+            document.getElementById('riddleText').textContent = riddle.question;
+            document.getElementById('answerInput').value = '';
+            document.getElementById('hintBox').classList.remove('show');
+            document.getElementById('feedback').classList.remove('show');
+            document.getElementById('current').textContent = currentRiddle + 1;
+            hintShown = false;
+
+            document.getElementById('answerInput').focus();
+        }
+
+        function checkAnswer() {
+            const userAnswer = document.getElementById('answerInput').value.trim().toLowerCase();
+            const riddle = riddles[currentRiddle];
+            const correctAnswer = riddle.answer.toLowerCase();
+            const alternatives = riddle.alternatives.map(a => a.toLowerCase());
+
+            let isCorrect = false;
+
+            if (userAnswer === correctAnswer || alternatives.includes(userAnswer)) {
+                isCorrect = true;
+            }
+
+            // Check for partial matches
+            if (!isCorrect && (userAnswer.includes(correctAnswer) || correctAnswer.includes(userAnswer))) {
+                if (userAnswer.length >= correctAnswer.length * 0.7) {
+                    isCorrect = true;
+                }
+            }
+
+            const feedback = document.getElementById('feedback');
+
+            if (isCorrect) {
+                let points = 100;
+                if (hintShown) points -= 10;
+                
+                streak++;
+                const bonusMultiplier = Math.floor(streak / 3);
+                points += bonusMultiplier * 20;
+
+                score += points;
+                
+                feedback.textContent = `🔥 CORRECT! +${points} points! 🔥`;
+                feedback.className = 'feedback correct show';
+
+                setTimeout(() => {
+                    currentRiddle++;
+                    loadRiddle();
+                    updateScore();
+                }, 1500);
+            } else {
+                streak = 0;
+                feedback.textContent = `❌ Not quite! The answer was: ${riddle.answer}`;
+                feedback.className = 'feedback incorrect show';
+
+                setTimeout(() => {
+                    currentRiddle++;
+                    loadRiddle();
+                    updateScore();
+                }, 2500);
+            }
+        }
+
+        function showHint() {
+            if (hintShown) return;
+            
+            const riddle = riddles[currentRiddle];
+            const hintBox = document.getElementById('hintBox');
+            hintBox.textContent = `💡 Hint: ${riddle.hint}`;
+            hintBox.classList.add('show');
+            hintShown = true;
+            hintsUsed++;
+        }
+
+        function skipRiddle() {
+            streak = 0;
+            const feedback = document.getElementById('feedback');
+            feedback.textContent = `⏭️ Skipped! The answer was: ${riddles[currentRiddle].answer}`;
+            feedback.className = 'feedback incorrect show';
+
+            setTimeout(() => {
+                currentRiddle++;
+                loadRiddle();
+                updateScore();
+            }, 2000);
+        }
+
+        function updateScore() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('streak').textContent = streak;
+        }
+
+        function endGame() {
+            gameActive = false;
+            document.getElementById('gameArea').style.display = 'none';
+            document.getElementById('gameOver').classList.add('show');
+            document.getElementById('finalScore').textContent = score;
+
+            let performance = '';
+            if (score >= 900) {
+                performance = "🏆 LEGENDARY! You're a true Soulja Boy expert! YOUUUUU! 🏆";
+            } else if (score >= 700) {
+                performance = "⭐ AMAZING! You really know your Soulja Boy!";
+            } else if (score >= 500) {
+                performance = "👏 GOOD JOB! You've got solid knowledge!";
+            } else if (score >= 300) {
+                performance = "📚 NOT BAD! Keep cranking that brain!";
+            } else {
+                performance = "🎓 Keep practicing! Watch him crank that Soulja Boy!";
+            }
+
+            document.getElementById('performance').textContent = performance;
+        }
+
+        function restartGame() {
+            startGame();
+        }
+
+        // Allow Enter key to submit
+        document.getElementById('answerInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !document.getElementById('submitBtn').disabled) {
+                checkAnswer();
+            }
+        });
+    </script>
+</body>
+</html>
